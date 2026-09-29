@@ -19,9 +19,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((error, success) => {
     if (error) {
-        console.error("❌ Gmail connection error:", error);
+        console.error(" Gmail connection error:", error);
     } else {
-        console.log("✅ Gmail server is ready");
+        console.log("Gmail server is ready");
     }
 });
 
@@ -35,11 +35,11 @@ export const sendEmail = async (to, subject, text, html) => {
             html,
         });
 
-        console.log("✅ Email sent:", info.messageId);
+        console.log(" Email sent:", info.messageId);
 
         return info;
     } catch (error) {
-        console.error("❌ Error sending email:", error);
+        console.error(" Error sending email:", error);
         throw error;
     }
 };

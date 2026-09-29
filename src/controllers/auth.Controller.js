@@ -10,13 +10,6 @@ import{ generateOtp , getOtpHtml} from "../utils/utils.js";
 
 export async function register(req, res) { 
     try {
-        console.log("REQUEST BODY:", req.body);
-
-        const { username, email, password } = req.body;
-
-        console.log("username:", username);
-        console.log("email:", email);
-        console.log("password:", password);
 
         // Validate fields
         if (!username || !email || !password) {
@@ -64,43 +57,6 @@ export async function register(req, res) {
        })
 
        await sendEmail(email, "Otp verification" , `your OTP code is ${otp}`,html)
-
-
-    //   const refreshToken = jwt.sign(
-    //         {
-    //             id: user._id
-    //         },
-    //         config.JWT_SECRET,
-    //         {
-    //             expiresIn: "7d"
-    //         }
-    //     );
-
-    //     const refreshTokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
-    //      const session = await sessionModel.create({
-    //         user : user._id,
-    //         refreshTokenHash,
-    //         ip: req.ip,
-    //         userAgent: req.headers["user-agent"]
-    //     })
-    //     // Generate JWT
-    //     const accesstoken = jwt.sign(
-    //         {
-    //             id: user._id,
-    //             sessionId: session._id
-    //         },
-    //         config.JWT_SECRET,
-    //         {
-    //             expiresIn: "15min"
-    //         }
-    //     );
-
-    //     res.cookie("refreshToken",refreshToken,{
-    //         httpOnly: true,
-    //         secure: true,
-    //         sameSite: "strict",
-    //         maxAge: 7 * 24 * 60 * 60 * 1000 //7days
-    //     })
 
 
         res.status(201).json({
