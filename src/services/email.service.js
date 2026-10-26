@@ -2,11 +2,11 @@ import nodemailer from "nodemailer";
 import config from "../config/config.js";
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    host: "smtp.gmail.com", //Gmail ka SMTP server hai.
+    port: 587, //email bhejne ke liye SMTP submission port hai.
+    secure: false, //connection shuru mein direct TLS se start nahi hota; STARTTLS se secure hota hai.
     auth: {
-        type: "OAuth2",
+        type: "OAuth2", //Gmail ke saath authenticate karne ke liye use hota hai.
         user: config.GOOGLE_USER,
         clientId: config.GOOGLE_CLIENT_ID,
         clientSecret: config.GOOGLE_CLIENT_SECRET,

@@ -20,5 +20,5 @@ authRouter.get("/logout",authController.logout)
 
 authRouter.get("/logoutall",authController.logoutAll)
 
-authRouter.get("/verify-email",authController.verifyEmail)
+authRouter.post("/verify-email",authController.verifyEmail)
 export default authRouter;

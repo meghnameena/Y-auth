@@ -7,18 +7,19 @@ import {sendEmail} from "../services/email.service.js";
 import otpModel from "../models/otp.model.js";
 import{ generateOtp , getOtpHtml} from "../utils/utils.js";
 
-
-export async function register(req, res) { 
+export async function register(req, res) {
     try {
+        // 1. Extract data from Postman request
+        const { username, email, password } = req.body;
 
-        // Validate fields
+        // 2. Validate fields
         if (!username || !email || !password) {
             return res.status(400).json({
                 message: "Username, email and password are required"
             });
         }
 
-        // Check duplicate username or email
+        // 3. Check duplicate username or email
         const isAlreadyRegistered = await UserModel.findOne({
             $or: [
                 { username },
@@ -32,41 +33,52 @@ export async function register(req, res) {
             });
         }
 
-        // Hash password
+        // 4. Hash password
         const hashedPassword = crypto
             .createHash("sha256")
             .update(password)
             .digest("hex");
 
-        // Create user
+        // 5. Create user
         const user = await UserModel.create({
             username,
             email,
             password: hashedPassword
         });
 
-       const otp = generateOtp();
-       const html = getOtpHtml(otp);
-       
-       const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
+        // 6. Generate OTP
+        const otp = generateOtp();
+        const html = getOtpHtml(otp);
 
-       await otpModel.create({
+        // 7. Hash OTP
+        const otpHash = crypto
+            .createHash("sha256")
+            .update(otp)
+            .digest("hex");
+
+        // 8. Save OTP in database
+        await otpModel.create({
             email,
             user: user._id,
             otpHash
-       })
+        });
 
-       await sendEmail(email, "Otp verification" , `your OTP code is ${otp}`,html)
+        // 9. Send verification email
+        await sendEmail(
+            email,
+            "OTP Verification",
+            `Your OTP code is ${otp}`,
+            html
+        );
 
-
-        res.status(201).json({
-            message: "User registered successfully",
+        // 10. Return response
+        return res.status(201).json({
+            message: "User registered successfully. Please verify your email.",
             user: {
                 username: user.username,
                 email: user.email,
                 verified: user.verified
-            },
-            
+            }
         });
 
     } catch (error) {
@@ -344,6 +356,7 @@ export async function verifyEmail(req, res) {
         }
     });
 }
+
 
 
 
